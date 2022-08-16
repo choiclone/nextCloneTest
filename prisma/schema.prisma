@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  idx      Int     @id @default(autoincrement())
+  id       String? @db.VarChar(256)
+  password String? @db.VarChar(1024)
+  token    String? @db.VarChar(256)
+}
+
+model subwayline {
+  idx       Int         @id @default(autoincrement())
+  lineName  String?     @db.VarChar(256)
+  lineId    String?     @db.VarChar(256)
+  lineColor String?     @db.VarChar(256)
+  x         Float?      @default(0)
+  y         Float?      @default(0)
+  subwaypos subwaypos[]
+}
+
+model subwaypos {
+  idx           Int         @id @default(autoincrement())
+  subwayStation String?     @db.VarChar(256)
+  subwayCode    String?     @db.VarChar(256)
+  subwayLine    Int?
+  PosX          Float       @default(0)
+  PosY          Float       @default(0)
+  subwayline    subwayline? @relation(fields: [subwayLine], references: [idx], onDelete: Cascade, map: "FK_subLine")
+
+  @@index([subwayLine], map: "subwayLine")
+}

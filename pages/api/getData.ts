@@ -1,25 +1,18 @@
-import mysql from 'mysql2';
+import mysql2 from 'mysql2';
+import mysql from 'mysql';
 import type { NextApiRequest, NextApiResponse } from 'next'
+import client from "../../libs/client";
 
 export default async function handler(
     req: NextApiRequest, 
     res: NextApiResponse
-) 
-{
-    let dbconnection = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        database: process.env.DB_DATABASE,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWD
+) {
+    await client.users.create({
+        data: {
+            id: "s207040@gmail.com",
+            password: "123412341234"
+        }
     });
-
-    try {
-        const query = "select * from subwayline"
-        const results = await dbconnection.execute(query);
-        console.log(results)
-    }catch (error) {
-        res.status(500).json({err: "err"});    
-    }
 
     res.status(200).json({name: "test"});
 }
